@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BioShield — Immune Threat Detection</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background: #000;
+            color: #00ff41;
+            font-family: 'Courier New', monospace;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .scanline {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0,255,65,0.03) 2px,
+                rgba(0,255,65,0.03) 4px
+            );
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        header {
+            border-bottom: 1px solid #00ff41;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+        }
+
+        .system-tag {
+            font-size: 11px;
+            color: #005514;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            font-size: 28px;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            margin: 8px 0 4px;
+        }
+
+        .subtitle {
+            font-size: 12px;
+            color: #007a20;
+            letter-spacing: 2px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .panel {
+            border: 1px solid #003a0f;
+            padding: 20px;
+            background: #010e03;
+        }
+
+        .panel-title {
+            font-size: 11px;
+            letter-spacing: 3px;
+            color: #007a20;
+            border-bottom: 1px solid #003a0f;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .field {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-size: 10px;
+            letter-spacing: 2px;
+            color: #007a20;
+            margin-bottom: 5px;
+        }
+
+        input, select {
+            width: 100%;
+            background: #000;
+            border: 1px solid #003a0f;
+            color: #00ff41;
+            padding: 8px 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            outline: none;
+        }
+
+        input:focus, select:focus {
+            border-color: #00ff41;
+        }
+
+        select option {
+            background: #000;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            background: transparent;
+            border: 1px solid #00ff41;
+            color: #00ff41;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.2s;
+        }
+
+        .btn:hover {
+            background: #00ff41;
+            color: #000;
+        }
+
+        .result-box {
+            border: 1px solid #003a0f;
+            padding: 20px;
+            background: #010e03;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .result-waiting {
+            color: #003a0f;
+            font-size: 12px;
+            letter-spacing: 3px;
+        }
+
+        .result-safe {
+            color: #00ff41;
+            font-size: 22px;
+            letter-spacing: 6px;
+            animation: pulse 2s infinite;
+        }
+
+        .result-threat {
+            color: #ff0000;
+            font-size: 22px;
+            letter-spacing: 6px;
+            animation: pulse 0.5s infinite;
+        }
+
+        .result-detail {
+            margin-top: 15px;
+            font-size: 11px;
+            color: #007a20;
+            letter-spacing: 2px;
+            line-height: 2;
+        }
+
+        .log {
+            margin-top: 15px;
+            font-size: 10px;
+            color: #005514;
+            text-align: left;
+            width: 100%;
+            line-height: 2;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .blink {
+            animation: pulse 1s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="scanline"></div>
+
+    <header>
+        <div class="system-tag">// bioshield v1.0 — immune-inspired threat detection system</div>
+        <h1>BioShield</h1>
+        <div class="subtitle">Negative Selection Algorithm &nbsp;|&nbsp; NSL-KDD Dataset &nbsp;|&nbsp; Real-time Analysis</div>
+    </header>
+
+    <div class="grid">
+        <div class="panel">
+            <div class="panel-title">// INPUT — NETWORK CONNECTION PARAMETERS</div>
+
+            <div class="field">
+                <label>Protocol Type</label>
+                <select id="protocol">
+                    <option value="1">TCP</option>
+                    <option value="2">UDP</option>
+                    <option value="0">ICMP</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label>Duration (seconds)</label>
+                <input type="number" id="duration" value="0" min="0">
+            </div>
+
+            <div class="field">
+                <label>Source Bytes</label>
+                <input type="number" id="src_bytes" value="232">
+            </div>
+
+            <div class="field">
+                <label>Destination Bytes</label>
+                <input type="number" id="dst_bytes" value="8153">
+            </div>
+
+            <div class="field">
+                <label>Flag</label>
+                <select id="flag">
+                    <option value="9">SF (Normal)</option>
+                    <option value="1">S0 (No Response)</option>
+                    <option value="2">REJ (Rejected)</option>
+                    <option value="5">RSTO (Reset)</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label>Logged In (0 = No, 1 = Yes)</label>
+                <input type="number" id="logged_in" value="1" min="0" max="1">
+            </div>
+
+            <button class="btn" onclick="analyze()">
+                ▶ &nbsp; Run Immune Analysis
+            </button>
+        </div>
+
+        <div class="result-box" id="result-box">
+            <div class="result-waiting blink">// AWAITING INPUT //</div>
+        </div>
+    </div>
+
+    <script>
+        async function analyze() {
+            const resultBox = document.getElementById('result-box');
+            resultBox.innerHTML = '<div class="result-waiting blink">// SCANNING... //</div>';
+
+            const payload = {
+                duration: parseFloat(document.getElementById('duration').value),
+                protocol_type: parseFloat(document.getElementById('protocol').value),
+                src_bytes: parseFloat(document.getElementById('src_bytes').value),
+                dst_bytes: parseFloat(document.getElementById('dst_bytes').value),
+                flag: parseFloat(document.getElementById('flag').value),
+                logged_in: parseFloat(document.getElementById('logged_in').value),
+            };
+
+            try {
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+
+                if (data.result === 'normal') {
+                    resultBox.innerHTML = `
+                        <div class="result-safe">✓ HOST SECURE</div>
+                        <div class="result-detail">
+                            THREAT LEVEL: NONE<br>
+                            CLASSIFICATION: NORMAL TRAFFIC<br>
+                            IMMUNE RESPONSE: NEGATIVE
+                        </div>
+                        <div class="log">
+                            > DETECTORS ACTIVATED: ${data.detectors}<br>
+                            > MATCHES FOUND: 0<br>
+                            > STATUS: SELF TISSUE RECOGNISED
+                        </div>
+                    `;
+                } else {
+                    resultBox.innerHTML = `
+                        <div class="result-threat">⚠ THREAT DETECTED</div>
+                        <div class="result-detail">
+                            THREAT LEVEL: HIGH<br>
+                            CLASSIFICATION: ${data.attack_type}<br>
+                            IMMUNE RESPONSE: ACTIVE
+                        </div>
+                        <div class="log">
+                            > DETECTORS ACTIVATED: ${data.detectors}<br>
+                            > ANOMALY SCORE: ${data.score}<br>
+                            > STATUS: FOREIGN PATHOGEN IDENTIFIED
+                        </div>
+                    `;
+                }
+            } catch(e) {
+                resultBox.innerHTML = '<div class="result-waiting">// CONNECTION ERROR //</div>';
+            }
+        }
+    </script>
+</body>
+</html>
